@@ -54,7 +54,7 @@ pipeline{
 
                 def build_number = currentBuild.number
 
-                def build_name = "echo "This was done by manasa"${branch_name}-${commit_id}-${build_number}"
+                def build_name = "echo "This was done by manasa ${branch_name}-${commit_id}-${build_number}"
                 
                 currentBuild.displayName = build_name
             }
