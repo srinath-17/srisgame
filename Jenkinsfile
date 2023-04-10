@@ -39,25 +39,26 @@ pipeline{
 	    }
     }*/
   }
-  post {
-        always {
-            script {
-                def branch_name = sh(
-                    script: 'git rev-parse --abbrev-ref HEAD',
-                    returnStdout: true
-                ).trim()
+ post {
+    always {
+        script {
+            def branch_name = sh(
+                script: 'git rev-parse --abbrev-ref HEAD',
+                returnStdout: true
+            ).trim()
 
-                def commit_id = sh(
-                    script: 'git rev-parse HEAD',
-                    returnStdout: true
-                ).trim()
+            def commit_id = sh(
+                script: 'git rev-parse HEAD',
+                returnStdout: true
+            ).trim()
 
-                def build_number = currentBuild.number
+            def build_number = currentBuild.number
 
-                def build_name = "This was done by manasa ${branch_name}-${commit_id}-${build_number}"
-                
-                currentBuild.displayName = build_name
-            }
+            def build_user = env.BUILD_USER_ID
+            def build_name = "This was done by ${build_user} on ${branch_name}-${commit_id}-${build_number}"
+            
+            currentBuild.displayName = build_name
         }
     }
+  }
 }
