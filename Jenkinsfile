@@ -23,7 +23,7 @@ pipeline{
 
      stage('CheckOutCode'){
        steps{
-	       git branch: 'master', credentialsId: '957b543e-6f77-4cef-9aec-82e9b0230975', url: 'https://github.com/srinath-17/srisgame.git'
+	       git branch: 'main', url: 'https://github.com/srinath-17/srisgame.git'
 	
 	   }
      }
