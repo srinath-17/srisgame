@@ -73,11 +73,22 @@
                     <target>11</target>
                  </configuration>
             </plugin>
+                
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <version>${spring.boot.version}</version>
             </plugin>
+            <plugin>
+                 <groupId>org.springframework.boot</groupId>
+                 <artifactId>spring-boot-maven-plugin</artifactId>
+                 <configuration>
+                    <mainClass>com.game.Application</mainClass>
+                    <layout>WAR</layout>
+                    <classifier>exec</classifier>
+                 </configuration>
+            </plugin>
+                       
         </plugins>
     </build>
     
