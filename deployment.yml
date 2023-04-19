@@ -1,1 +1,32 @@
-
+apiVersion: v1
+kind: Deployment
+metadata:
+  labels:
+    name: gameapp
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        name: gameapp
+    spec:
+      containers:
+      - image: uppusrinath/gameapp:1.0
+        name: gameapp
+        ports:
+        - name: gameapp
+          containerPort: 8080  
+---
+# Node Port Service
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    name: gameapp
+spec:
+  type: NodePort
+  ports:
+    - port: 8080
+      targetPort: 8080
+  selector:
+    name: gameapp
