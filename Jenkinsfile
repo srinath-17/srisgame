@@ -38,6 +38,18 @@ pipeline{
 		   build job: 'sris_game_testing_proj_dev'
 	    }
     }*/
+    stage("Deploy To Kuberates Cluster"){
+       kubernetesDeploy(
+         configs: 'deployment.yml', 
+         kubeconfigId: 'KUBERNATES_CONFIG',
+         enableConfigSubstitution: true
+        )
+     }
+	 
+	  /**
+      stage("Deploy To Kuberates Cluster"){
+        sh 'kubectl apply -f deployment.yml'
+      } **/
   }
  post {
     always {
