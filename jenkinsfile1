@@ -1,0 +1,24 @@
+pipeline {
+    agent any
+    
+    stages {
+        stage('Example') {
+            steps {
+                script {
+                  
+                    def buildNumber = env.BUILD_NUMBER
+                    def streamName = env.JOB_NAME
+                    
+                    println "Build number: ${buildNumber}"
+                    println "Stream name: ${streamName}"
+                    // Your Jenkins build steps go here
+                }
+            }
+        }
+        stage('Create start.sh file') {
+            steps {
+                sh 'python create_start_sh.py'
+            }
+        }
+    }
+}
