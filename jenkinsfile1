@@ -2,11 +2,7 @@ pipeline {
     agent any
     
     
-    environment {
-        // Define the sudo password as an environment variable
-        SUDO_PASSWORD = credentials('sudo-password')
-    }
-    
+   
     stages {
         stage('Example') {
             steps {
@@ -21,21 +17,11 @@ pipeline {
                 }
             }
         }
-        stage("installing python"){
-           steps{
-                sh '''
-                    # Update package lists
-                     echo $SUDO_PASSWORD | sudo -S apt-get update
-           
-                    # Install Python 3
-                   echo $SUDO_PASSWORD | sudo -S apt-get install python3
-               '''
-           }
-        }
+       
 
         stage('Create start.sh file') {
             steps {
-                sh 'python create_start_sh.py'
+                sh 'python3 create_start_sh.py'
             }
         }
     }
