@@ -24,5 +24,24 @@ pipeline {
                 sh '/home/ubuntu/python3 create_start_sh.py'
             }
         }
+        stage('Wait 10 seconds') {
+            steps {
+                sleep 10
+            }
+        }
+        stage('Check start.sh') {
+            steps {
+                script {
+                    def startShFile = new File("start.sh")
+                    if (!startShFile.exists()) {
+                        currentBuild.result = 'ABORTED'
+                        emailext body: 'Failed to create start.sh',
+                            recipientProviders: [[$class: 'DevelopersRecipientProvider']],
+                            subject: 'Pipeline aborted'
+                    }
+                }
+            }
+        }
     }
+    
 }
