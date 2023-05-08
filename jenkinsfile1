@@ -21,7 +21,7 @@ pipeline {
 
         stage('Create start.sh file') {
             steps {
-                sh 'python3.10.6 create_start_sh.py'
+                sh '/home/ubuntu/python3 create_start_sh.py'
             }
         }
     }
