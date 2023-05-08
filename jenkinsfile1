@@ -38,6 +38,32 @@ pipeline {
                         emailext body: 'Failed to create start.sh',
                             recipientProviders: [[$class: 'DevelopersRecipientProvider']],
                             subject: 'Pipeline aborted'
+                     else (startShFile.exists()) {
+                        def apiUrl = "https://example.com/api"
+                        def response = httpRequest(url: apiUrl, httpMode: 'GET')
+                        echo "API response: ${response.content}
+                        echo " The Test has been Started"
+                    }
+                }
+            }
+        }
+        stage('Wait for end.txt file') {
+            steps {
+                script {
+                    def endFile = new File("end.txt")
+                    def apiUrl = "https://example.com/api"
+                    def maxAttempts = 27
+                    def attempt = 0
+                    while (!endFile.exists() && attempt < maxAttempts) {
+                        sleep 600
+                        attempt++
+                    }
+                    if (endFile.exists()) {
+                        def response = httpRequest(url: apiUrl, httpMode: 'GET')
+                        echo "API response: ${response.content}"
+                    } else {
+                        echo "Failed: end.txt file not created after 4.5 hours"
+                        // Code for sending email notification goes here
                     }
                 }
             }
