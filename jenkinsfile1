@@ -7,6 +7,49 @@ pipeline {
         stage("Checkout"){
            steps{
               
+parameters {
+        string(name: "BRANCH_NAME", defaultValue: "main", description: "Branch name")
+        string(name: "bitbucket_credential_id", defaultValue: "bitbucket_credential_id", description: "Bitbucket credentials ID")
+        string(name: "bitbucket_url_fetch", defaultValue: "https://github.com/srinath-17/srisgame.git", description: "Bitbucket URL for fetch")
+    }
+    stages {
+        stage("Checkout") {
+            steps {
+                script {
+                    def checkout_dir = "${checkout_dir_basepath}/${env.JOB_NAME}_${env.BUILD_NUMBER}"
+                    def checkoutSource = {
+                        dir("${checkout_dir_basepath}") {
+                            withEnv(['GIT_SSL_NO_VERIFY=true', 'SSH_ASKPASS=']) {
+                                checkout changelog: true,
+                                scm: [
+                                    $class: 'GitSCM',
+                                    branches: [[name: "*/${BRANCH_NAME}"]],
+                                    doGenerateSubmoduleConfigurations: false,
+                                    extensions: [
+                                        [$class: 'RelativeTargetDirectory', relativeTargetDir: "${checkout_dir}"],
+                                        [$class: 'CloneOption', reference: "/jenkins_home/git-cache/sri.git"]
+                                    ],
+                                    userRemoteConfigs: [
+                                        [credentialsId: "${bitbucket_credential_id}", url: "${bitbucket_url_fetch}"]
+                                    ]
+                                ]
+                            }
+                        }
+                    }
+                    checkoutSource()
+                    dir("${checkout_dir}"){
+                        sh "git checkout ${BRANCH_NAME}"
+                        sh 'git fetch origin "refs/notes/*:refs/notes/*"'
+                        sh 'git remote -v'
+                        sh 'git fetch origin "refs/notes/*:refs/notes/*"'
+                        def files = sh(script: "git ls-tree -r ${BRANCH_NAME} --name-only", returnStdout: true)
+                        files = files.split('\n')
+                    }
+                }
+            }
+        }
+    }
+              
         stage('Example') {
             steps {
                 script {
